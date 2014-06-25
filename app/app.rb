@@ -17,7 +17,34 @@ class NetPrint < Sinatra::Base
     erb :index
   end
 
-  run! if app_file == $0
+  get '/login' do
+    erb :login
+  end
 
+  post '/login' do
+  end
+
+  # Move to this page after login. User can upload photos here.
+  get '/user' do
+    erb :user
+  end
+
+  post '/user/upload' do
+  end
+
+  post '/user/submit' do
+  end
+
+  # Move to this page after login for admin. Show album list.
+  get '/admin' do
+    erb :admin
+  end
+
+  # Show album detail.
+  get '/admin/:album_id' do
+    erb :photo_list
+  end
+
+  run! if app_file == $0
 end
 
