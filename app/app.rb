@@ -21,7 +21,7 @@ class NetPrint < Sinatra::Base
     erb :login
   end
 
-  post '/login' do
+  post '/doLogin' do
   end
 
   # Move to this page after login. User can upload photos here.
@@ -36,12 +36,12 @@ class NetPrint < Sinatra::Base
   end
 
   # Move to this page after login for admin. Show album list.
-  get '/admin' do
+  get '/admin/albumList' do
     erb :admin
   end
 
   # Show album detail.
-  get '/admin/:album_id' do
+  get '/admin/album/:album_id' do
     erb :photo_list
   end
 
