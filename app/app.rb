@@ -14,14 +14,33 @@ class NetPrint < Sinatra::Base
   end
 
   get '/' do
-    erb :index
+    redirect to('/login')
+#    erb :index
   end
 
   get '/login' do
     erb :login
   end
 
+  def hash(str)
+    solt = "Euzd{?.B4huzKTk7m494r#L+Zc4M3(sptg#zieMh46V$n=o8{v"
+    Digest::SHA256.hexdigest(str + solt)
+  end
+
+  def get_hasshed_password(password)
+    $i = 0
+    $num = 5
+
+    while $i < $num  do
+      password = hash(password)
+      $i +=1
+    end
+    password
+  end
+
   post '/doLogin' do
+    input_password = params[:password]
+    hasshed_password = get_hasshed_password(input_password)
   end
 
   # Move to this page after login. User can upload photos here.
@@ -47,4 +66,3 @@ class NetPrint < Sinatra::Base
 
   run! if app_file == $0
 end
-

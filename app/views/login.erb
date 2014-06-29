@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>ログイン</title>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="container">
+    <h1>ログイン画面</h1>
+    <form action="doLogin" method="POST" class="form" role="form">
+        <div class="form-group">
+            <label for="loginId">ログインID</label>
+            <input name="login_id" id="loginId" class="form-control" type="text" placeholder="ログインID">
+        </div>
+        <div class="form-group">
+            <label for="password">ログインID</label>
+            <input name="password" id="password" class="form-control" type="text" placeholder="パスワード">
+        </div>
+        <input class="btn btn-default" type="submit" value="ログインする">
+    </form>
+</div>
+</body>
+</html>
