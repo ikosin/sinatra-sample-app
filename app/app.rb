@@ -212,7 +212,11 @@ EOS
   get '/admin/albumList' do
     mysql = connection
 
-    erb :admin
+    @album_list = mysql.xquery(
+      'SELECT * FROM album INNER JOIN account ON album.account_id = account.account_id ORDER BY album.created_at DESC'
+    )
+
+    erb :album_list
   end
 
   # Show album detail.

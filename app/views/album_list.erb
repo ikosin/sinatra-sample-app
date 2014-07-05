@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>アルバム一覧</title>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <h1>アルバム一覧</h1>
+    <table class="table table-striped">
+        <tr>
+            <th>アルバムID</th>
+            <th>作成者</th>
+            <th>作成日時</th>
+            <th></th>
+        </tr>
+        <% @album_list.each do |album| %>
+            <tr>
+                <td><%= album['album_id'] %></td>
+                <td><%= album['name'] %></td>
+                <td><%= album['created_at'].getlocal.strftime("%Y年%m月%d日 %H時%M分%S秒") %></td>
+                <td><a href="/admin/album/<%= album['album_id'] %>">表示する</a></td>
+            </tr>
+        <% end %>
+    </table>
+</div>
+</body>
+</html>
