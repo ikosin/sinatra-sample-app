@@ -9,9 +9,11 @@ require 'fileutils'
 require 'uuid'
 
 class NetPrint < Sinatra::Base
-  enable :sessions
   $UUID    = UUID.new
 
+  configure do
+    enable :sessions
+  end
   configure :development do
     register Sinatra::Reloader
   end
