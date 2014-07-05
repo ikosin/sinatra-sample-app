@@ -9,6 +9,9 @@ require 'fileutils'
 require 'uuid'
 
 class NetPrint < Sinatra::Base
+  enable :sessions
+  $UUID    = UUID.new
+
   configure :development do
     register Sinatra::Reloader
   end
@@ -87,7 +90,7 @@ EOS
     user = mysql.xquery("SELECT * FROM account WHERE login_id = ? AND password = ?", input_login_id, hasshed_password).first
     if user
       session.clear
-      session["user_id"] = user["id"]
+      session["account_id"] = user["account_id"]
       session["token"] = Digest::SHA256.hexdigest(Random.new.rand.to_s)
       if user["role"] = 1
         redirect("/user")
