@@ -160,6 +160,26 @@ EOS
   post '/user/submit' do
     mysql = connection
     check_token
+
+    quantity = params["quantity"]
+    unless quantity
+      halt 400, "no photo selected"
+    end
+
+    mysql.xquery(
+      'INSERT INTO album (account_id, delivery_address, status) VALUES (?, ?, 1)',
+      session["account_id"], ""
+    )
+    album_id = mysql.last_id
+
+    quantity.each do |photo|
+      quantity
+      mysql.xquery(
+        'INSERT INTO photo_album_relation (album_id, photo_id, quantity) VALUES (?, ?, ?)',
+        album_id, photo.split("_")[0], photo.split("_")[1]
+      )
+    end
+    "success"
   end
 
   # Show photo
