@@ -108,9 +108,53 @@ EOS
     erb :user
   end
 
+  # Upload photo
   post '/user/upload' do
     mysql = connection
     check_token
+
+    files = params[:files]
+    unless files
+      halt 400, "400 Bad Request"
+    end
+
+    dir = '/share/app/data' # load_config['data_dir']
+
+    result = '{"files": ['
+
+    $i = 0
+    files.each do |file|
+      if $i > 0
+        result += ','
+      end
+      $i +=1
+      unless file[:type].match(/^image\/(jpe?g|png)$/)
+        halt 400, "400 Bad Request"
+      end
+      photo_hash = Digest::SHA256.hexdigest($UUID.generate)
+      FileUtils.move(file[:tempfile].path, "#{dir}/photo/#{photo_hash}.#{file[:type].match(/^image\/(jpe?g|png)$/)[1]}") or halt 500
+
+      mysql.xquery(
+        'INSERT INTO photo (photo_hash, account_id, file_name, extension) VALUES (?, ?, ?, ?)',
+        photo_hash, session["account_id"], file[:filename], file[:type].match(/^image\/(jpe?g|png)$/)[1]
+      )
+      id    = mysql.last_id
+      photo = mysql.xquery('SELECT * FROM photo WHERE photo_id = ?', id).first
+
+      result += <<EOS
+      {
+        "id": "#{photo["photo_id"]}",
+        "name": "#{photo["file_name"]}",
+        "url": "\/data\/photo\/#{photo["photo_id"]}",
+        "thumbnailUrl": "\/data\/photo\/#{photo["photo_id"]}",
+        "deleteUrl": "\/delete\/#{photo["photo_id"]}",
+        "deleteType": "DELETE"
+      }
+EOS
+    end
+
+    result += ']}'
+    json(JSON.parse(result))
   end
 
   post '/user/submit' do
