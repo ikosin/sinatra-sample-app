@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>写真一覧</title>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <h1>写真一覧</h1>
+    <table class="table table-striped">
+        <tr>
+            <th>写真ID</th>
+            <th></th>
+            <th>枚数</th>
+        </tr>
+        <% @photo_list.each do |photo| %>
+            <tr>
+                <td><%= photo['photo_id'] %></td>
+                <td><img src="/data/photo/<%= photo['photo_id']%>" alt="<%= photo['file_name'] %>"/></td>
+                <td><%= photo['quantity'] %></td>
+            </tr>
+        <% end %>
+    </table>
+</div>
+</body>
+</html>

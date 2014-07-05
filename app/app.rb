@@ -223,6 +223,12 @@ EOS
   get '/admin/album/:album_id' do
     mysql = connection
 
+    album_id = params['album_id']
+    @photo_list = mysql.xquery(
+        'SELECT * FROM photo INNER JOIN photo_album_relation ON photo.photo_id = photo_album_relation.photo_id AND photo_album_relation.album_id = ?',
+        album_id
+    )
+
     erb :photo_list
   end
 
