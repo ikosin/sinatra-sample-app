@@ -89,14 +89,14 @@ EOS
     end
 
     hasshed_password = get_hasshed_password(input_password)
-    user = mysql.xquery("SELECT * FROM account WHERE login_id = ? AND password = ?", input_login_id, hasshed_password).first
-    if user
+    account = mysql.xquery("SELECT * FROM account WHERE login_id = ? AND password = ?", input_login_id, hasshed_password).first
+    if account
       session.clear
-      session["account_id"] = user["account_id"]
+      session["account_id"] = account["account_id"]
       session["token"] = Digest::SHA256.hexdigest(Random.new.rand.to_s)
-      if user["role"] = 1
+      if account["role"] == 1
         redirect("/user")
-      elsif user["role"] = 9
+      elsif account["role"] == 9
         redirect("/admin/albumList")
       end
     else
