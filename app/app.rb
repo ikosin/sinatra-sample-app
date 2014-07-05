@@ -162,6 +162,30 @@ EOS
     check_token
   end
 
+  # Show photo
+  get '/data/photo/:photo_id' do
+    mysql = connection
+    check_token
+
+    photo_id = params[:photo_id]
+    photo = mysql.xquery('SELECT * FROM photo WHERE photo_id = ?', photo_id).first
+
+    dir  = './data' # load_config['data_dir']
+    dir  = '/share/app/data' # load_config['data_dir']
+
+    file_path = "#{dir}/photo/#{photo["photo_hash"]}.#{photo["extension"]}"
+    unless File.exist?(file_path)
+      halt 404
+    end
+
+    file = File.open(file_path)
+    data = file.read
+    file.close
+
+    content_type "image/#{photo["extension"]}"
+    data
+  end
+
   # Move to this page after login for admin. Show album list.
   get '/admin/albumList' do
     mysql = connection
