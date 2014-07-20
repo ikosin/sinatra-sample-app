@@ -7,6 +7,8 @@ require 'digest/sha2'
 require 'tempfile'
 require 'fileutils'
 require 'uuid'
+require 'zip'
+require 'debugger'
 require File.expand_path '../helpers.rb', __FILE__
 
 class NetPrint < Sinatra::Base
@@ -18,6 +20,7 @@ class NetPrint < Sinatra::Base
     enable :sessions
   end
   configure :development do
+    set :bind, '0.0.0.0'
     register Sinatra::Reloader
   end
 
@@ -135,6 +138,20 @@ EOS
         'INSERT INTO photo_album_relation (album_id, photo_id, quantity) VALUES (?, ?, ?)',
         album_id, photo.split("_")[0], photo.split("_")[1]
       )
+    end
+
+    # Create ZIP file
+    photos = mysql.xquery(
+      'SELECT * FROM photo p INNER JOIN photo_album_relation par ON p.photo_id = par.photo_id AND par.album_id = ?',
+      album_id
+    )
+
+    dir = '/share/app/data' # load_config['data_dir']
+    zipfile_name = "#{dir}/zip/album_#{album_id}.zip"
+    Zip::File.open(zipfile_name, Zip::File::CREATE) do |zipfile|
+      photos.each do |photo|
+        "#{dir}/photo/#{photo['photo_hash']}.#{photo['extension']}"
+      end
     end
     "success"
   end
